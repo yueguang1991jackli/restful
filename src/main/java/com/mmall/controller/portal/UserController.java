@@ -16,15 +16,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * 前台用户管理
  * @author liliang
  */
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    IUserService iUserService;
-
-
+    private IUserService iUserService;
 
     /**
      * 用户登陆

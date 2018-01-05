@@ -2,7 +2,6 @@ package com.mmall.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mmall.common.ServerResponse;
-import com.mmall.common.UserList;
 import com.mmall.pojo.User;
 
 import java.io.UnsupportedEncodingException;

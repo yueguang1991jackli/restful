@@ -6,13 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
-import com.mmall.common.UserList;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.utils.Md5Encode;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +26,7 @@ import java.util.UUID;
  * @author liliang
  */
 @Service(value = "iUserService")
+@Scope("")
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;

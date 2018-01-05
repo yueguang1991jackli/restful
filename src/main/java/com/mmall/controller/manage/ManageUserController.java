@@ -1,8 +1,8 @@
 package com.mmall.controller.manage;
 
 import com.github.pagehelper.PageInfo;
+import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
-import com.mmall.common.UserList;
 import com.mmall.controller.portal.UserController;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * 后台用户管理
  * @author liliang
  */
 @RestController
@@ -21,11 +22,14 @@ import java.security.NoSuchAlgorithmException;
 public class ManageUserController {
 
     @Autowired
-    IUserService iUserService;
+    private IUserService iUserService;
 
     @PostMapping("/login.do")
-    public ServerResponse<User> login(String username, String password, HttpServletRequest request) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        return new UserController().login(username,password,request);
+    public ServerResponse<User> login(String username, String password, HttpServletRequest request)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        ServerResponse<User> response = iUserService.login(username, password);
+        request.getSession().setAttribute(Const.CURRENT_USER, response.getData());
+        return response;
     }
 
     @GetMapping("/list.do")

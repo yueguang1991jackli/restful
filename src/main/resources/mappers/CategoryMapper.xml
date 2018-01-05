@@ -21,6 +21,9 @@
     from mmall_category
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT id FROM mmall_category WHERE name = #{name}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from mmall_category
     where id = #{id,jdbcType=INTEGER}
@@ -116,4 +119,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getCategoryByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from mmall_category
+    where
+    parent_id = #{parentId}
+  </select>
 </mapper>
