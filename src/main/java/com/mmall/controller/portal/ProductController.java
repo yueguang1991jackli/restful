@@ -1,14 +1,18 @@
 package com.mmall.controller.portal;
 
 import com.github.pagehelper.PageInfo;
+import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Product;
+import com.mmall.pojo.User;
 import com.mmall.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * 前台商品模块
@@ -42,7 +46,11 @@ public class ProductController {
      * @return
      */
     @GetMapping("detail.do")
-    public ServerResponse<Product> getDetail(Integer productId){
+    public ServerResponse<Product> getDetail(Integer productId, HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerResponse.createByErrorMessage("用户未登录,请登录");
+        }
         return productService.getDetail(productId);
     }
 }

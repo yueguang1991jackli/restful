@@ -7,10 +7,12 @@ import com.mmall.dao.CategoryMapper;
 import com.mmall.dao.ProductMapper;
 import com.mmall.pojo.Product;
 import com.mmall.service.IProductService;
+import com.mmall.vo.ProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ import java.util.List;
 @Service("iProductService")
 public class ProductServiceImpl implements IProductService {
 
+    String defaultOrderBy = "asc";
     @Autowired
     ProductMapper productMapper;
 
@@ -78,6 +81,42 @@ public class ProductServiceImpl implements IProductService {
             }
             return ServerResponse.createByErrorMessage("该商品已下架或删除");
         }return ServerResponse.createByErrorMessage("该商品已下架或删除");
+    }
+
+    @Override
+    public ServerResponse<List<Product>> listProducts(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Product> productList = productMapper.selectAllProduct();
+        if (CollectionUtils.isEmpty(productList)){
+            return ServerResponse.createByErrorMessage("查询失败");
+        }
+        return ServerResponse.createBySuccess(productList);
+    }
+
+    @Override
+    public ServerResponse<PageInfo<ProductVo>> search(Integer productId, String productName, Integer pageNum, Integer pageSize) {
+        if(productId == null&& productName != null){
+            PageHelper.startPage(pageNum, pageSize);
+            List<ProductVo> productList = productMapper.selectByNameVo(productName);
+            if (CollectionUtils.isEmpty(productList)){
+                return ServerResponse.createByErrorMessage("查询失败");
+            }else {
+                PageInfo<ProductVo> pageInfo = new PageInfo<>(productList);
+                return ServerResponse.createBySuccess(pageInfo);
+            }
+        }else if (productId != null&& productName == null){
+            PageHelper.startPage(pageNum, pageSize);
+            ProductVo product = productMapper.selectByKey(productId);
+            if (product == null){
+                return ServerResponse.createByErrorMessage("品类未找到,请重试");
+            }else {
+                List<ProductVo> productList = new ArrayList<>();
+                productList.add(product);
+                PageInfo<ProductVo> pageInfo = new PageInfo<>(productList);
+                return ServerResponse.createBySuccess(pageInfo);
+            }
+        }
+        return ServerResponse.createByErrorMessage("参数错误");
     }
 
 }

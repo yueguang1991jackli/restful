@@ -29,7 +29,15 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
+    <!--登录拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/*/login.do"/>
+            <mvc:exclude-mapping path="/*/register.do"/>
+            <bean class="com.mmall.Interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 
     <!-- 文件上传 -->
