@@ -9,18 +9,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author liliang
- */
+* @author liliang
+*/
 public class LoginInterceptor extends HandlerInterceptorAdapter{
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            response.sendError(404,"用户未登录,请登录");
-            return false;
-        }
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute(Const.CURRENT_USER);
+//        if (user == null){
+//            response.sendError(404,"用户未登录,请登录");
+//            return false;
+//        }
         return true;
     }
 

@@ -25,7 +25,7 @@ public interface ProductMapper {
 
     List<Product> selectAllProduct();
 
-    List<ProductVo> selectByNameVo(String productName);
+    List<ProductVo> selectByNameVo(String name);
 
     ProductVo selectByKey(Integer productId);
 }

@@ -3,17 +3,21 @@ package com.mmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mmall.common.ServerResponse;
-import com.mmall.dao.CategoryMapper;
 import com.mmall.dao.ProductMapper;
 import com.mmall.pojo.Product;
 import com.mmall.service.IProductService;
 import com.mmall.vo.ProductVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 商品模块
@@ -22,9 +26,15 @@ import java.util.List;
 @Service("iProductService")
 public class ProductServiceImpl implements IProductService {
 
-    String defaultOrderBy = "asc";
+    @Value("ftp.url")
+    private String ftpUrl;
+
+    private String defaultOrderBy = "asc";
+
     @Autowired
     ProductMapper productMapper;
+
+    public static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     /**
      * 产品搜索,分两种情况,一种是品类搜索,一种是模糊查询的搜索
@@ -117,6 +127,31 @@ public class ProductServiceImpl implements IProductService {
             }
         }
         return ServerResponse.createByErrorMessage("参数错误");
+    }
+
+    @Override
+    public ServerResponse<Map<String, String>> upload(MultipartFile upload_file,String path) throws IOException {
+        if (upload_file != null){
+            //文件保存到服务器
+            //1 保存到本地
+            //获取名称,并生成随机名称
+            String originalFilename = upload_file.getOriginalFilename();
+            String fileExtName = originalFilename.substring(originalFilename.lastIndexOf("."),originalFilename.length());
+            String uuid= UUID.randomUUID().toString();
+            String fileName = uuid+fileExtName;
+            File file = new File(path+"/"+fileName);
+            boolean newFile = file.createNewFile();
+            if (newFile){
+                upload_file.transferTo(file);
+                Map<String,String> resultMap = new HashMap<>();
+                resultMap.put("uri",fileName);
+                resultMap.put("url",file.getPath());
+                    //返回文件保存路径,已共后续访问
+                return ServerResponse.createBySuccess(resultMap);
+            }
+            logger.error("创建文件失败,可能没有权限");
+        }
+        return ServerResponse.createByError();
     }
 
 }

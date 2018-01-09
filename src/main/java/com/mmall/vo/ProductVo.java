@@ -14,6 +14,15 @@ public class ProductVo {
     private String mainImage;
     private BigDecimal price;
 
+    public ProductVo(Integer id, Integer categoryId, String name, String subtitle, String mainImage, BigDecimal price) {
+        this.id = id;
+        this.categoryId = categoryId;
+        this.name = name;
+        this.subtitle = subtitle;
+        this.mainImage = mainImage;
+        this.price = price;
+    }
+
     public Integer getId() {
         return id;
     }
