@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * 前台用户管理
+ * 前台用户模块
  * @author liliang
  */
 @RestController

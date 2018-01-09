@@ -176,4 +176,20 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByShipping" parameterType="com.mmall.pojo.Shipping" resultType="java.lang.Integer">
+    SELECT id FROM mmall_shipping WHERE user_id = #{userId,jdbcType=INTEGER} AND
+    receiver_name = #{receiverName,jdbcType=VARCHAR} AND
+    receiver_phone = #{receiverPhone,jdbcType=VARCHAR} AND
+    receiver_mobile = #{receiverMobile,jdbcType=VARCHAR} AND
+    receiver_province = #{receiverProvince,jdbcType=VARCHAR} AND
+    receiver_city = #{receiverCity,jdbcType=VARCHAR} AND
+    receiver_address = #{receiverAddress,jdbcType=VARCHAR} AND
+    receiver_zip = #{receiverZip,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultType="com.mmall.pojo.Shipping">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM mmall_shipping
+    WHERE user_id = #{id}
+  </select>
 </mapper>

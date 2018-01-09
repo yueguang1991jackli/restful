@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Product;
+import com.mmall.pojo.Shipping;
 import com.mmall.pojo.User;
 import com.mmall.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 /**
- * 前台商品模块
+ * 前台产品模块
  * @author liliang
  */
 @RestController
@@ -24,7 +25,7 @@ public class ProductController {
     @Autowired
     private IProductService productService;
     /**
-     * 产品搜索及动态排序List
+     * 1 产品搜索及动态排序List
      * @param categoryId
      * @param keyword
      * @param pageNum
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     /**
-     * 获取产品详细信息
+     * 获取产品detail
      * @param productId
      * @return
      */
@@ -53,4 +54,5 @@ public class ProductController {
         }
         return productService.getDetail(productId);
     }
+
 }

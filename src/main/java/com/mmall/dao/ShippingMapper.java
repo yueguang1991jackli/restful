@@ -2,6 +2,8 @@ package com.mmall.dao;
 
 import com.mmall.pojo.Shipping;
 
+import java.util.List;
+
 public interface ShippingMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,8 @@ public interface ShippingMapper {
     int updateByPrimaryKeySelective(Shipping record);
 
     int updateByPrimaryKey(Shipping record);
+
+    List<Integer> selectByShipping(Shipping shipping);
+
+    List<Shipping> selectByUserId(Integer id);
 }

@@ -132,8 +132,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ServerResponse<Map<String, String>> upload(MultipartFile upload_file,String path) throws IOException {
         if (upload_file != null){
-            //文件保存到服务器
-            //1 保存到本地
+            //保存到本地
             //获取名称,并生成随机名称
             String originalFilename = upload_file.getOriginalFilename();
             String fileExtName = originalFilename.substring(originalFilename.lastIndexOf("."),originalFilename.length());
@@ -143,7 +142,7 @@ public class ProductServiceImpl implements IProductService {
             boolean newFile = file.createNewFile();
             if (newFile){
                 upload_file.transferTo(file);
-                Map<String,String> resultMap = new HashMap<>();
+                Map<String,String> resultMap = new HashMap<>(16);
                 resultMap.put("uri",fileName);
                 resultMap.put("url",file.getPath());
                     //返回文件保存路径,已共后续访问
