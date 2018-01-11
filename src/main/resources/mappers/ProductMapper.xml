@@ -216,4 +216,10 @@
     from mmall_product
     where id = #{productId}
   </select>
+  <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from mmall_product
+    where id = #{key,jdbcType=INTEGER}
+  </select>
 </mapper>

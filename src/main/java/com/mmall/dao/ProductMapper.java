@@ -28,4 +28,6 @@ public interface ProductMapper {
     List<ProductVo> selectByNameVo(String name);
 
     ProductVo selectByKey(Integer productId);
+
+    Product selectByProductId(Integer key);
 }
