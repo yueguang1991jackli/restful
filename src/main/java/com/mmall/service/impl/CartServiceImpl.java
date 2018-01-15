@@ -27,7 +27,7 @@ public class CartServiceImpl implements ICartService {
     @Autowired
     CartMapper cartMapper;
     @Override
-    public ServerResponse<CartVo> getCart(String cartJson) {
+    public ServerResponse<CartVo> getCart(String cartJson, Integer id) {
         //转换为map对象
         Map<String,Integer> map = new HashMap<>(16);
         Map<String,Integer> parseObject = JsonUtil.parseObject(cartJson, map.getClass());
@@ -40,6 +40,10 @@ public class CartServiceImpl implements ICartService {
             Product product = productMapper.selectByProductId(Integer.parseInt(key));
             CartVo.CartProductVo cartProductVo = new CartVo.CartProductVo();
             cartProductVo.setId(i);i++;
+            if (id == null){
+
+            }
+            cartProductVo.setUserId(id);
             cartProductVo.setProductId(product.getId());
             cartProductVo.setQuantity(parseObject.get(key));
             cartProductVo.setProductName(product.getName());
@@ -68,24 +72,38 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public Map<String, Integer> add(String cartJson, Integer productId, Integer count) {
+        //判断商品是否合法
+        Product product = productMapper.selectByProductId(productId);
+        if (product==null){
+            return null;
+        }
         //获取对用productId商品的已存在数量,并相加
         Map<String,Integer> map = new HashMap<>(16);
         Map<String,Integer> parseObject = JsonUtil.parseObject(cartJson, map.getClass());
         //购物车中已存在商品
-        if (parseObject != null) {
+        if (parseObject.size()!=0) {
             Integer hasCount = parseObject.get(productId.toString());
-            count=count+hasCount;
-            Product product = productMapper.selectByProductId(productId);
-            // 判断相加后的数量小于库存
-            if (count<=product.getStock()){
-                //放到map中,并解析为json string
-                map.put(productId.toString(),count);
-                return map;
+            //没有相同产品,将产品信息放入map中返回,判断小于库存
+            if (hasCount == null){
+                if(count<product.getStock()){
+                    parseObject.put(productId.toString(),count);
+                    return parseObject;
+                }
+                return null;
+            }else //有相同产品,数量相加
+            {
+                count=count+hasCount;
+                // 判断相加后的数量小于库存
+                if (count<=product.getStock()){
+                    //放到map中,并解析为json string
+                    parseObject.put(productId.toString(),count);
+                    return parseObject;
+                }
+                return null;
             }
-            return null;
         }
         //购物车中不存在商品
-        map.put(productId.toString(),count);
-        return map;
+        parseObject.put(productId.toString(),count);
+        return parseObject;
     }
 }

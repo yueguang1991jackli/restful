@@ -2,12 +2,11 @@ package com.mmall.controller.portal;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
+import com.mmall.pojo.User;
 import com.mmall.service.ICartService;
 import com.mmall.utils.CookieUtil;
 import com.mmall.utils.JsonUtil;
 import com.mmall.vo.CartVo;
-import com.sun.deploy.net.HttpResponse;
-import com.sun.xml.internal.ws.resources.HttpserverMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +40,11 @@ public class CartController {
         if (cartJson == null){
             return ServerResponse.createBySuccessMessage("购物车为空");
         }
-        return iCartService.getCart(cartJson);
+        User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
+        if (user ==null){
+            return iCartService.getCart(cartJson,null);
+        }
+        return iCartService.getCart(cartJson, user.getId());
     }
 
 
@@ -55,14 +58,20 @@ public class CartController {
     public ServerResponse<CartVo> add(HttpServletResponse response, HttpServletRequest request, Integer productId, Integer count){
         //cookie存放map(count,productId)
         String cartJson = CookieUtil.getUid(request, Const.CARTCOOKIENAME);
+        if (cartJson==null){
+            cartJson="{}";
+        }
         Map<String, Integer> map = iCartService.add(cartJson, productId, count);
         if (map == null){
             return ServerResponse.createByErrorMessage("参数异常");
         }else {
             String jsonString = JsonUtil.toJSONString(map);
-            CookieUtil.addCookie(response,Const.CARTCOOKIENAME,jsonString,60);
-            ServerResponse<CartVo> result = iCartService.getCart(jsonString);
-            return result;
+            CookieUtil.addCookie(response,Const.CARTCOOKIENAME,jsonString,600000);
+            User user = (User) request.getSession().getAttribute(Const.CURRENT_USER);
+            if (user ==null){
+                return iCartService.getCart(jsonString,null);
+            }
+            return iCartService.getCart(jsonString, user.getId());
         }
     }
 
