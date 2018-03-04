@@ -19,6 +19,7 @@
             <list>
                 <value>classpath:datasource.properties</value>
                 <value>classpath:config.properties</value>
+                <value>classpath:zfbinfo.properties</value>
             </list>
         </property>
         <property name="fileEncoding" value="utf-8"/>

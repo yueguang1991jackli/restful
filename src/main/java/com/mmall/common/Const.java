@@ -25,4 +25,11 @@ public class Const {
         int ROLE_CUSTOMER = 0;//普通用户
         int ROLE_ADMIN = 1;//管理员
     }
+    public interface TradeStatus{
+        String TRADE_CLOSED = "交易关闭";
+        String TRADE_FINISHED = "交易结束";
+        String TRADE_SUCCESS = "支付成功";
+        String WAIT_BUYER_PAY = "交易创建";
+
+    }
 }
